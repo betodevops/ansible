@@ -1,0 +1,11 @@
+ec2_keypair: "key"
+ec2_security_group: "sg-511e9335"
+ec2_instance_type: "t2.micro"
+ec2_image: "ami-db710fa3"
+ec2_subnet_ids: ['subnet-6dd18408']
+ec2_region: "us-west-2"
+ec2_tag_Name: "elk_new"
+ec2_tag_Type: "elk_new"
+ec2_tag_Environment: "stg"
+ec2_volume_size: 8
+aws_instances_count: 1
