@@ -1,0 +1,52 @@
+---
+    - name: Install the package "kibana"
+      apt:
+        name: kibana
+        state: latest
+    - name: edit kibana file    
+      lineinfile:
+        dest: /etc/kibana/kibana.yml
+        regexp: "^server.host:"
+        line: 'server.host: "0.0.0.0"'
+    - name: Enable Kibana
+      service:
+        name: kibana
+        state: restarted
+    - name: Enable Kibana
+      service:
+        name: kibana
+        enabled: yes
+     
+    - name: Create file nginx
+      copy:
+        dest: /etc/nginx/sites-available/kibana
+        content: |
+          server {
+          listen 80;
+ 
+          server_name _;
+ 
+          auth_basic "Restricted Access";
+          auth_basic_user_file /etc/nginx/htpasswd.kibana;
+ 
+          location / {
+          proxy_pass http://localhost:5601;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection 'upgrade';
+          proxy_set_header Host $host;
+          proxy_cache_bypass $http_upgrade;
+          }
+          }
+    - name: Create symbolic link 
+      file:
+        src: "/etc/nginx/sites-available/kibana"
+        dest: "/etc/nginx/sites-enabled/kibana"
+        state: link      
+
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+

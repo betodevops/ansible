@@ -1,0 +1,14 @@
+---
+    - name: Install Filebeat
+      shell: | 
+        #/usr/share/logstash/bin/logstash-plugin update logstash-input-beats
+        echo "deb https://packages.elastic.co/beats/apt stable main" | sudo tee -a /etc/apt/sources.list.d/beats.list
+    - name: update
+      apt:
+        update_cache: yes
+
+    - name: Install Filebeat
+      apt:
+       name: filebeat
+       state: present
+        

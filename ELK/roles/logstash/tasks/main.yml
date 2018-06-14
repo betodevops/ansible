@@ -1,0 +1,65 @@
+---
+    - name: Add Package logastsh
+      shell: |
+        wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+        echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
+
+    - name: update
+      apt:
+        update_cache: yes
+
+    - name: Install logstash
+      apt:
+       name: logstash
+       state: present
+ 
+    - name: Create file nginx
+      copy:
+        dest: /etc/logstash/conf.d/logstash.conf
+        content: |
+          input {
+          syslog {
+          type => "syslog"
+          port => "5544"
+          }
+          }
+          output {
+          elasticsearch {
+          hosts => ["http://localhost:9200"]
+          }
+          }
+
+    - name: Start init.d to logstash
+      shell: /usr/share/logstash/bin/system-install /etc/logstash/startup.options sysv 
+
+    - name: Enable logstash
+      service:
+        name: logstash
+        enabled: yes
+
+    - name: Start Logstash
+      service:
+        name: logstash
+        state: restarted
+
+    - name: Create file nginx
+      copy:
+        dest: /etc/logstash/conf.d/filebeat.conf
+        content: |
+          input {
+          beats {
+          port => 5044
+          
+          }
+          }
+          output {
+          elasticsearch {
+          hosts => ["http://localhost:9200"]
+          manage_template => false
+          index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+          document_type => "%{[@metadata][type]}"
+          }
+          }
+
+    - name: Install filebeats plugin
+      shell: /usr/share/logstash/bin/logstash-plugin update logstash-input-beats

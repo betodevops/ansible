@@ -1,0 +1,22 @@
+---
+- hosts: tag_Name_elk_new
+  pre_tasks:
+    - name: Install python for Ansible
+      gather_facts: false
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      register: output
+      changed_when: output.stdout != ""
+      remote_user: ubuntu
+      groups: ['sudo']
+  become: yes
+  become_method: sudo
+  gather_facts: false
+  vars:
+    elk_hostname: "{{ ec2_tag_Hostname }}"
+  roles:
+     - nginx
+     - common
+     - logstash
+     - elasticsearch
+     - kibana
+     - filebeat

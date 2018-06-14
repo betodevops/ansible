@@ -1,0 +1,22 @@
+---
+    - name: add repo java
+      apt_repository: repo='ppa:webupd8team/java' state=present
+     
+    - name: update
+      apt:  update_cache=yes
+
+    - name: accept oracle license
+      debconf:
+        name: "oracle-java-installer"
+        question: "shared/accepted-oracle-license-v1-1"
+        value: "true"
+        vtype: "select"
+
+    - name: Install list of packages
+      action: apt pkg={{item}} state=installed
+      with_items:
+           - apt-transport-https
+           - software-properties-common
+           - wget
+           - python
+           - oracle-java8-installer
