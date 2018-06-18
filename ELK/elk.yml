@@ -20,3 +20,4 @@
      - elasticsearch
      - kibana
      - filebeat
+     - curator

@@ -1,0 +1,72 @@
+---
+    - name: install pip
+      apt:
+        name: python-pip
+        state: present
+     
+    - name: install curator
+      shell: | 
+        pip install elasticsearch-curator
+        sudo mkdir -p /data/scripts
+    - name: Create file curator
+      copy:
+        dest: /data/scripts/curator-config.yml
+        content: |
+          client:
+            hosts:
+              - 127.0.0.1: 9200
+            url_prefix:
+            use_ssl: False
+            certificate:
+            client_cert:
+            client_key:
+            ssl_no_validate: True
+            http_auth:
+            timeout: 30
+            master_only: False
+          logging:  
+            loglevel: INFO
+            logfile:
+            logformat: default
+            blacklist: ['elasticsearch', 'urllib3']
+
+    - name: config curator
+      copy:
+        dest: /data/scripts/curator-action.yml
+        content: |
+          actions:
+            1:
+              action: close
+              description: close indices
+              options:
+                delete_aliases: False
+                timeout_override:
+                continue_if_exception: True
+                disable_action: False
+              filters:
+              -
+                filtertype: age
+                source: name
+                direction: older
+                timestring: '%Y.%m.%d'
+                unit: days
+                unit_count: 14
+                exclude:
+            2:
+              action: delete_indices
+              description: delete indices
+              filters:
+              -
+                filtertype: age
+                source: name
+                direction: older
+                timestring: '%Y.%m.%d'
+                unit: days
+                unit_count: 30
+                exclude:
+
+    - cron:
+        name: "check dirs"
+        minute: "30"
+        hour: "23"
+        job: "/usr/local/bin/curator --config /data/scripts/curator-config.yml /data/scripts/curator-action.yml >> /tmp/curator.log 2>&1" 
