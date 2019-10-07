@@ -14,11 +14,27 @@ jobs:
       - run: echo "A more familiar hi"
 
   terceiro:
+    context: dalas
     docker:
       - image: circleci/ruby:2.4.1
     steps:
       - checkout
-      - run: echo "terceir"
+      - ruin:
+          command: |
+            mkdir -p ~/lendico/project/docker
+            BRANCH=$(echo ${CIRCLE_BRANCH} | sed 's@/@_@')
+            PROJECT_NAME=$(git remote get-url origin | cut -d \/  -f 2 | cut -d .  -f 1 | sed -e 's@lendico-@@' | sed -e 's@_@-@')
+            echo "export PROJECT_NAME=${PROJECT_NAME}" > ~/lendico/project/docker/env
+            echo "export BRANCH=$(echo ${BRANCH})" >> ~/lendico/project/docker/env
+            echo "export DOCKER_IMAGE=$(echo betodalas/${PROJECT_NAME}:${BRANCH})" >> ~/lendico/project/docker/env
+            echo "export DOCKER_IMAGES_LOCAL_REGISTRY=~/lendico/project/docker/images" >> ~/lendico/project/docker/env
+            echo "export CONVOX_RACK_NAME=$(echo ${CIRCLE_BRANCH} | cut -d / -f 1)" >> ~/lendico/project/docker/env
+            echo "terceir"
+            docker build -t ${DOCKER_IMAGE} .
+            docker login -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASSWORD}
+            mkdir -p ${DOCKER_IMAGES_LOCAL_REGISTRY}
+            docker save ${DOCKER_IMAGE} -o ${DOCKER_IMAGES_LOCAL_REGISTRY}/project_image.tar
+          
 workflows:
   version: 2
   primeiro_e_segundo:
