@@ -19,6 +19,6 @@ workflows:
   primeiro_e_segundo:
     jobs:
       - segundo
-      - primeiro
+      - primeiro:
           requires:
             - segundo
