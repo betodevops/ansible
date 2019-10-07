@@ -14,6 +14,7 @@ jobs:
       - run: echo "A more familiar hi"
 
   terceiro:
+    working_directory: ~/lendico/project
     context: dalas
     docker:
       - image: circleci/ruby:2.4.1
