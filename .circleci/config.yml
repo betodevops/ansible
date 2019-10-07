@@ -33,4 +33,4 @@ workflows:
       - hold:
           type: approval
           requires:
-            - primeiro
+            - terceiro
