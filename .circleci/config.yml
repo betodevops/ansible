@@ -19,7 +19,7 @@ jobs:
       - image: circleci/ruby:2.4.1
     steps:
       - checkout
-      - ruin:
+      - run:
           command: |
             mkdir -p ~/lendico/project/docker
             BRANCH=$(echo ${CIRCLE_BRANCH} | sed 's@/@_@')
