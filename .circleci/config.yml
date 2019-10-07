@@ -20,3 +20,5 @@ workflows:
     jobs:
       - segundo
       - primeiro
+          requires:
+            - segundo
