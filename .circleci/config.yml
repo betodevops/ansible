@@ -33,4 +33,7 @@ workflows:
       - hold:
           type: approval
           requires:
-            - primeiro 
+            - primeiro
+      - deploy:
+          requires:
+            - hold 
