@@ -14,6 +14,14 @@ jobs:
       - checkout
       - run: echo "A more familiar hi"
       - run: sleep 15
+
+  terceiro:
+    docker:
+      - image: circleci/ruby:2.4.1
+    steps:
+      - checkout
+      - run: echo "terceir"
+      - run: sleep 15
 workflows:
   version: 2
   primeiro_e_segundo:
@@ -22,3 +30,7 @@ workflows:
       - primeiro:
           requires:
             - segundo
+      - hold:
+          type: approval
+          requires:
+            - primeiro 
