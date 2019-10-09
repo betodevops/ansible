@@ -17,7 +17,7 @@ jobs:
     working_directory: ~/lendico/project
     context: dalas
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: circleci/python:3.7-stretch
     steps:
       - checkout
       - run:
