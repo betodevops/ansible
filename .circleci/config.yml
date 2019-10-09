@@ -34,6 +34,7 @@ jobs:
             echo "export DOCKER_IMAGES_LOCAL_REGISTRY=~/lendico/project/docker/images" >> ~/lendico/project/docker/env
             echo "export CONVOX_RACK_NAME=$(echo ${CIRCLE_BRANCH} | cut -d / -f 1)" >> ~/lendico/project/docker/env
             echo "terceir"
+            source ~/lendico/project/docker/env
             docker build -t ${DOCKER_IMAGE} .
             docker login -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASSWORD}
             mkdir -p ${DOCKER_IMAGES_LOCAL_REGISTRY}
