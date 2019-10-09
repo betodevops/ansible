@@ -28,6 +28,9 @@ jobs:
             echo "export PROJECT_NAME=${PROJECT_NAME}" > ~/lendico/project/docker/env
             echo "export BRANCH=$(echo ${BRANCH})" >> ~/lendico/project/docker/env
             echo "export DOCKER_IMAGE=$(echo betodalas/${PROJECT_NAME}:${BRANCH})" >> ~/lendico/project/docker/env
+            echo ${DOCKER_IMAGE}
+            echo ${PROJECT_NAME"}
+            echo ${BRANCH}
             echo "export DOCKER_IMAGES_LOCAL_REGISTRY=~/lendico/project/docker/images" >> ~/lendico/project/docker/env
             echo "export CONVOX_RACK_NAME=$(echo ${CIRCLE_BRANCH} | cut -d / -f 1)" >> ~/lendico/project/docker/env
             echo "terceir"
