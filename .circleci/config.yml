@@ -15,7 +15,6 @@ jobs:
 
   terceiro:
     working_directory: ~/lendico/project
-    context: dalas
     machine: true
     steps:
       - checkout
@@ -37,7 +36,7 @@ jobs:
             docker build -t ${DOCKER_IMAGE} .
             docker login -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASSWORD}
             mkdir -p ${DOCKER_IMAGES_LOCAL_REGISTRY}
-            docker save ${DOCKER_IMAGE} -o ${DOCKER_IMAGES_LOCAL_REGISTRY}/project_image.tar
+            docker save ${DOCKER_IMAGE} -o ${DOCKER_IMAGESBRANCH_LOCAL_REGISTRY}/project_image.tar
           
 workflows:
   version: 2
@@ -52,6 +51,7 @@ workflows:
           requires:
             - primeiro
       - terceiro:
+          context: dalas
           filters:  # using regex filters requires the entire branch to match
             branches:
               only:  # only branches matching the below regex filters will run
