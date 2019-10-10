@@ -40,7 +40,6 @@ jobs:
 
   quarto:
     machine: true
-    working_directory: ~/lendico/project
     steps:
       - checkout
       - attach_workspace:
