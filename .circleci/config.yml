@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - run: echo "A more familiar hi"
-
+  
   terceiro:
     working_directory: ~/lendico/project
     machine: true
@@ -37,7 +37,27 @@ jobs:
             docker login -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASSWORD}
             mkdir -p ${DOCKER_IMAGES_LOCAL_REGISTRY}
             docker save ${DOCKER_IMAGE} -o ${DOCKER_IMAGES_LOCAL_REGISTRY}/project_image.tar
-          
+
+  quarto:
+    machine: true
+    working_directory: ~/lendico/project
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/lendico/project
+      - run:
+          name: Running unit tests
+          command: |
+            chmod +x .circleci/teste.sh
+            .circleci/teste.sh
+      - store_test_results:
+          path: docker/test_reports
+      - store_artifacts:
+          path: docker/test_reports
+      - persist_to_workspace:
+          root: .
+          paths:
+            - docker/test_reports          
 workflows:
   version: 2
   primeiro_e_segundo:
