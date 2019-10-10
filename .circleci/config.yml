@@ -16,7 +16,6 @@ jobs:
   terceiro:
     working_directory: ~/lendico/project
     context: dalas
-    build:
       machine:
         docker_layer_caching: true
     
