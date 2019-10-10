@@ -79,3 +79,10 @@ workflows:
                 - /user-.*/
           requires:
             - hold
+      - quarto:
+          requires:
+            - terceiro
+          filters:
+            branches:
+              only:
+                - dev
