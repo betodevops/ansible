@@ -16,8 +16,10 @@ jobs:
   terceiro:
     working_directory: ~/lendico/project
     context: dalas
-    docker:
-      - image: circleci/python:3.7-stretch
+    build:
+      machine:
+        docker_layer_caching: true
+    
     steps:
       - checkout
       - run:
